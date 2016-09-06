@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计算器</title>
+    <style>
+        *{margin:0px; padding: 0px;}
+        body{font-family: "Arial"}
+        .calc{width:300px; height: 400px; margin: 0px auto; background: #1F1F1F; position: relative;}
+        .calc p{line-height:20px; font-size: 12px; color: #ffffff; text-align: right; padding: 0px 5px;}
+        .calc input{height: 80px; padding: 2px 0px; width: 100%; background: #D8DCBE; padding: 0px; border: none; text-align: right; font: 700 50px/84px Arial;}
+        .calc ul{padding-left: 10px; padding-bottom: 20px; position: relative;}
+        .calc ul li{list-style: none; float: left; width: 62px; line-height: 41px; height: 41px; text-align: center; background: #4C4C4C; margin-right: 10px; margin-top: 17px;}
+        .calc ul li a{font-size: 30px; color:#ffffff; text-decoration: none; display: block;}
+        .calc ul li a:hover{background: #F6801D;}
+        .calc ul .b1{position: absolute; top: 174px; right: 0; height: 99px;}
+        .calc ul .b1 a{height: 99px; line-height: 99px;}
+        .calc ul .b2{width: 135px;}
+        .calc .p1{position: absolute; top: 20px; right: 0px; width:100%; height: 20px; line-height: 20px; font-size: 12px; padding: 0px 5px; box-sizing:border-box}
+    </style>
+    <script>
+        window.onload = function(){
+            var oCalc = document.getElementById('calc');
+            var aA = oCalc.getElementsByTagName('a');
+            var oIpt1 = oCalc.getElementsByTagName('input')[0];
+            var oIpt2 = oCalc.getElementsByTagName('input')[1];
+            var s = false;
+            
+            for(var i = 0; i < aA.length; i++ ){
+                aA[i].onclick = function(){
+                    switch(this.innerHTML){
+                        case "c" :
+                            oIpt1.value = 0;
+                            oIpt2.value = "";
+                            break;
+                        case "%" :
+                            count("%");
+                            break;
+                        case "÷" :
+                            count("/");
+                            break;
+                        case "-" :
+                            count("-");
+                            break;
+                        case "+" :
+                            count("+");
+                            break;
+                        case "×" :
+                            count("*");
+                            break;
+                        case "=" :
+                            s || (oIpt2.value += oIpt1.value);
+                            oIpt1.value = eval(oIpt2.value);
+                            oIpt1.value = oIpt1.value.substr(0,10).replace("NaN",0);
+                            s = true;
+                            break;
+                        default :
+                            s && (oIpt1.value = 0, oIpt2.value = "", s = false);
+                            oIpt1.value.length < 10 && (oIpt1.value = (oIpt1.value + this.innerHTML).replace(/^[0\%\/\*\-\+](\d)/,"$1"));
+                    }
+                }
+            }
+            function count(x){
+                if(s){
+                    oIpt2.value = oIpt1.value + x;
+                    oIpt1.value = x;
+                    s = false;
+                }else{
+                    /[\%\/\*\-\+]$/.test(oIpt1.value) || (oIpt2.value += oIpt1.value);
+                    oIpt1.value = x;
+                    /[\%\/\*\-\+]$/.test(oIpt2.value) || (oIpt2.value += oIpt1.value);
+                    oIpt2.value = oIpt2.value.slice(-1) != x ? oIpt2.value.replace(/.$/,x) : oIpt2.value
+                }
+            }
+            
+            var str = "abcdefg";  
+            document.write(str.split("").reverse().join(""));  
+        }        
+    </script>
+</head>
+<body>
+    <div class="calc" id="calc">
+        <P>dsadwdw</P>
+        <input type="text" readonly="readonly" value="0">
+        <ul>
+            <li><a href="javascript:;">c</a></li>
+            <li><a href="javascript:;">%</a></li>
+            <li><a href="javascript:;">÷</a></li>
+            <li><a href="javascript:;">×</a></li>
+            <li><a href="javascript:;">s</a></li>
+            <li><a href="javascript:;">8</a></li>
+            <li><a href="javascript:;">9</a></li>
+            <li><a href="javascript:;">-</a></li>
+            <li><a href="javascript:;">4</a></li>
+            <li><a href="javascript:;">5</a></li>
+            <li><a href="javascript:;">6</a></li>
+            <li><a href="javascript:;">+</a></li>
+            <li><a href="javascript:;">1</a></li>
+            <li><a href="javascript:;">2</a></li>
+            <li><a href="javascript:;">3</a></li>
+            <li class="b1"><a href="javascript:;">=</a></li>
+            <li class="b2"><a href="javascript:;">0</a></li>
+            <li><a href="javascript:;">.</a></li>
+        </ul>
+        <input type="text" readonly="readonly" class="p1">
+    </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>求数组中所有数字的和</title>
+	<style type="text/css">
+		div{width:500px; margin:5px auto;}
+		strong{font-size: 20px; color:red;}
+	</style>
+	<script type="text/javascript">
+		window.onload=function(){
+			var oBtn = document.getElementsByTagName('button')[0];
+			var oStr = document.getElementsByTagName('strong')[0];
+			var oInput = document.getElementsByTagName('input')[0];
+			oInput.onkeyup = function(){
+				this.value = this.value.replace(/[^(\d)|(,)]/,"");
+			}
+			oBtn.onclick = function(){
+				var val = oInput.value.split(',')
+				var sum = 0;
+
+				for (var i = 0; i < val.length; i++) {
+					sum += parseInt(val[i]);
+				}
+
+				oStr.innerHTML=sum;
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="main">
+		<input type="text" id="input">
+		<button>求和</button>
+		<strong></strong>
+	</div>
+</body>
+</html>

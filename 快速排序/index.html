@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.onload=  function(){
+				var str = [33,23,1,0,7,8,88,87,102,32,5,33,8,87];//随便定义一个数组
+				function quickSort(arr){ //定义方法
+					if (arr.length <= 1) return arr; //判断数组元素个数，如果是1，直接返回
+					var pivotIndex = Math.floor(arr.length / 2); //获取元素个数的中间值
+					var pivot = arr.splice(pivotIndex, 1)[0]; //获取基准值，并且删除此值
+					var left = []; //定义空数组-小的
+					var right = [];//定义空数组-大得
+					for (var i = 0; i < arr.length; i++) { 
+						if (arr[i] < pivot) { //小于基准值的放入left
+							left.push(arr[i]);
+						}else{//大于基准值的放入right
+							right.push(arr[i]);
+						}
+					}
+					//用递归一直调用此方法，使用concat合并结果，在left和right中间加上刚才删除的基准值
+					return quickSort(left).concat([pivot], quickSort(right));
+				}
+				console.log(str);//执行
+			}
+		</script>
+	</body>
+</html>

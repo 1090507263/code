@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>坚果手机滑入效果</title>
+    <style>
+        body,div,ul,li,img{margin: 0px;padding: 0px;}
+        .div1{width: 100%; height: 100%; position: absolute;bottom: -20px;left: 0px; overflow: hidden;}
+        .ul1{position: absolute; bottom: 0px; left: 0px; overflow: hidden; width: 100%;will-change: transform; transition: transform .4s cubic-bezier(.445,.05,.55,.95);}
+        .ul1 li{width: 14.285%; float:left; list-style: none; transition: transform .4s cubic-bezier(.445,.05,.55,.95);}
+        .ul1 li img{width: 100%; border: none; cursor: pointer; will-change: transform; transition: transform .3s cubic-bezier(0,.68,.86,.98);}
+        .ul1 li:nth-child(1) img{transform:translate3d(0,65%,0);}
+        .ul1 li:nth-child(2) img{transform:translate3d(0,45%,0);}
+        .ul1 li:nth-child(3) img{transform:translate3d(0,65%,0);}
+        .ul1 li:nth-child(4) img{transform:translate3d(0,40%,0);}
+        .ul1 li:nth-child(5) img{transform:translate3d(0,20%,0);}
+        .ul1 li:nth-child(6) img{transform:translate3d(0,40%,0);}
+        .ul1 li:nth-child(7) img{transform:translate3d(0,55%,0);}
+        #abc li img{transform: translate3d(0,25%,0) !important;}
+        #abc li.lager img{transform: translate3d(0,15%,0) !important;}
+        #abc li.prev{transform:translate3d(-13%,0,0);}
+        #abc li.next{transform:translate3d(13%,0,0);}
+    </style>
+    <script>
+        window.onload = function(){
+        		//获取元素到屏幕左边的距离
+	        function offsetL(obj){
+	            var left = 0;
+	            while(obj){
+	                left += obj.offsetLeft;
+	                obj = obj.offsetparent;
+	            }
+	            return left;
+	        }
+	        //获取可视区宽度
+	        function view(){ 
+	            return {
+	                W : document.documentElement.clientWidth
+	            }
+	        }
+	        //鼠标滑过
+        		function moveFn(ev){
+            		clientX = ev.clientX;
+            		cancelAnimationFrame( timer )
+               	timer = requestAnimationFrame( animation );
+               	tames = new Date().valueOf();
+               	console.log("tames:",tames);
+            }
+            //鼠标移开
+            function outFn(){
+            		cancelAnimationFrame( timer );
+            		for(var i = 0; i < aImg.length; i++){
+            			aImg[i].removeAttribute("style");
+            		}
+            }
+            //鼠标滑过执行动画
+            function animation(){
+            		var animationTime = new Date().valueOf();
+	            for(var i = 0; i < aImg.length; i++){
+	                //图片中心点X轴的距离
+	                var middle = offsetL(aImg[i]) + aImg[i].offsetWidth / 2;
+	                //鼠标X轴与图片中心点X的差值
+	                var distance =Math.abs( clientX - middle );
+	                if(distance > maxWidth) distance = maxWidth;
+	                //得到一个比例-目标点
+	                var scale = distance / maxWidth * 60;
+	                //当前图片距离定位父级Y轴的距离
+	                var top = aImg[i].getBoundingClientRect().top - aLi[i].getBoundingClientRect().top;
+	                //当前图片距离定位父级Y轴的距离所占图片总高度百分比
+	                var n = top / aImg[i].offsetHeight * 100;
+	                //缓冲运动
+	                var t = (scale - n) / 5;
+	                n += t;
+	                aImg[i].style.transform = "translate3d(0,"+ n +"%,0)";
+	                aImg[i].style.transition = "none";
+	                
+	            }
+	            if ( animationTime - tames < 1000) {
+	            		timer = requestAnimationFrame( animation );
+	            }
+	        }
+            var oDiv = document.getElementsByTagName('div')[0];
+            var oUl = document.getElementsByTagName('ul')[0];
+            var aLi = document.getElementsByTagName('li');
+            var aImg = document.getElementsByTagName('img');
+            //给图片加索引，给li平均分配宽度
+            for(var i = 0; i < aLi.length; i++){
+                aImg[i].index = i;
+                aLi[i].style.width = (view().W / 7 / view().W) *100 + "%";
+            }
+            var maxWidth = oUl.offsetWidth / 7 * 5;//受影响的宽度，只有5个受影响
+            
+            var timer = null,clientX = 0,tames = 0,onOff = true;
+            
+            oUl.onmousemove = moveFn;
+            
+            oUl.onmouseout = outFn;
+            
+            oUl.onclick = function(ev){
+            		cancelAnimationFrame( timer );
+				var target =ev.target;
+				if (onOff) {
+					if (target.nodeName.toLocaleLowerCase() === "img") {
+						oUl.id = "abc";
+						for(var i = 0; i < aImg.length; i++){
+							aImg[i].style.transition = "transform .4s cubic-bezier(.445,.05,.55,.95)";
+						}
+						for(var j = 0; j < aImg.length; j++){
+	                        if(j < target.index){
+	                            aImg[j].parentNode.className = "prev";
+	                        }else if(j > target.index){
+	                            aImg[j].parentNode.className = "next";
+	                        }
+	                    }
+						target.parentNode.className = "lager";
+						
+						//图片中心点X轴的距离
+						var targetMiddle = offsetL( target ) + target.offsetWidth/2;
+						//图片中心点到可视区中间的差值
+						var value = view().W / 2 - targetMiddle;
+						
+						oUl.style.transform = "translate3d("+ value*3 +"px,0,0) scale(3)";
+						oUl.onmousemove = null;
+						oUl.onmouseout = null;
+					}
+					onOff = !onOff;
+				}else{
+					oUl.id = "";
+					oUl.removeAttribute("style");
+					for (var i = 0; i < aLi.length; i++) {
+						aLi[i].className = "";
+					}
+        				setTimeout(function(){
+                        oUl.onmousemove = moveFn;
+                        oUl.onmouseout = outFn;
+                        onOff = !onOff;
+                    },300)
+				}
+            }
+            
+        }
+        
+        
+    </script>
+</head>
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><img src="img/1-1.png" alt=""></li>
+            <li><img src="img/2-2.png" alt=""></li>
+            <li><img src="img/3-3.png" alt=""></li>
+            <li><img src="img/4-4.png" alt=""></li>
+            <li><img src="img/5-5.png" alt=""></li>
+            <li><img src="img/6-6.png" alt=""></li>
+            <li><img src="img/7-7.png" alt=""></li>
+        </ul>
+    </div>
+</body>
+</html>

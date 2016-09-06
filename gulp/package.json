@@ -1,0 +1,22 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "项目描述",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "关键字"
+  ],
+  "author": "石晓杰",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cache": "^0.4.5",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-imagemin": "^3.0.3",
+    "gulp-sass": "^2.3.2",
+    "imagemin-pngquant": "^5.0.0"
+  }
+}

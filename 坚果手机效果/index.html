@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>坚果手机效果</title>
+    <style>
+        body,ul,li,img{
+            padding:0;
+            margin:0;
+        }
+        li{
+            list-style: none;
+        }
+        img{
+            border: none;
+        }
+        .div1 {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            bottom: -20px;
+            height: 100%;
+            overflow:hidden;
+        }
+        .ul1 {
+            width:100%;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            transition: transform .4s cubic-bezier(.445,.05,.55,.95);
+            overflow:hidden;
+        }
+        .ul1 li {
+            float: left;
+            width: 13.8%; 
+            position: relative;
+            transition: transform .4s cubic-bezier(.445,.05,.55,.95);
+            will-change: transform;
+        }
+        .ul1 li img{
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            position: relative;
+            will-change: transform;
+            -webkit-transition: transform .3s cubic-bezier(0,.68,.86,.98);
+            transition: transform .3s cubic-bezier(0,.68,.86,.98);
+            cursor: pointer;
+            background-size:contain;
+            background-repeat:  no-repeat;
+        }
+        .ul1 li:nth-child(1) img{
+            -webkit-transform: translate3d( 0px,63%,0px);
+        }
+        .ul1 li:nth-child(2) img{
+            -webkit-transform: translate3d( 0px,47%,0px);
+        }
+        .ul1 li:nth-child(3) img{
+            -webkit-transform: translate3d( 0px,67%,0px);
+        }
+        .ul1 li:nth-child(4) img{
+            -webkit-transform: translate3d( 0px,47%,0px);
+        }
+        .ul1 li:nth-child(5) img{
+            -webkit-transform: translate3d( 0px,27%,0px);
+        }
+        .ul1 li:nth-child(6) img{
+            -webkit-transform: translate3d( 0px,47%,0px);
+        }
+        .ul1 li:nth-child(7) img{
+            -webkit-transform: translate3d( 0px,61%,0px);
+        }
+        .div2{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 10;
+            height: 370px;
+        }
+        .div2 div{
+            width: 10px;
+            height: 10px;
+            background: red;
+            position: absolute;
+            left: 0;
+            top:0;
+        }
+
+        .ul1 li.prev{
+            transform: translate3d(-13%,0,0);
+        }
+        .ul1 li.next{
+            transform: translate3d(13%,0,0);
+        }
+        #abc li:nth-child(n) img{
+            transform:translate3d(0,25%,0) !important;
+        }
+        #abc ul li.lager img{
+            transform:translate3d(0,15%,0) !important;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+            function view(){ 
+                return {
+                    W : document.documentElement.clientWidth
+                }
+            }
+            function offsetL(obj){
+                var left = 0;
+                while(obj){
+                    left += obj.offsetLeft;
+                    obj = obj.offsetParent;
+                }
+                return left;
+            }
+            function moveFn(ev){
+                clientX = ev.clientX;
+                cancelAnimationFrame(timer);
+                timer = requestAnimationFrame(animation);
+                times = new Date().valueOf();
+            }
+            function outFn(){
+                cancelAnimationFrame(timer);
+                for(var i = 0; i < aImg.length; i++){
+                    aImg[i].removeAttribute("style");
+                }
+            }
+            function animation(){
+                var animationTime = new Date().valueOf();
+                for(var i = 0; i < aImg.length; i++){
+                    //中心点X轴的距离
+                    var middle = offsetL(aImg[i]) + aImg[i].offsetWidth / 2;
+                    //鼠标到每张图片中心点X轴的一个差值
+                    var destance = Math.abs(clientX - middle);
+                    if(destance > l) destance = l;
+                    //得到一个比例
+                    var scale = Math.abs(destance / l ) * 60;
+                    //得到当前图片距离定位父级Y轴的距离
+                    var top = aImg[i].getBoundingClientRect().top - aLi[i].getBoundingClientRect().top;
+                    var n = top / aImg[i].offsetHeight * 100;
+                    var t = (scale - n) / 5;
+                    n += t;
+                    aImg[i].style.transform = "translate3d(0,"+n+"%,0)";
+                    aImg[i].style.transition = "none";
+                }
+                if(animationTime - times < 1000){
+                    timer = requestAnimationFrame(animation);
+                }
+
+            }
+            var aImg = document.getElementsByTagName('img');
+            var aLi = document.getElementsByTagName('li');
+            var oUl = document.querySelectorAll('.ul1')[0];
+            var oDiv = document.querySelectorAll('.div1')[0];
+            //受影响最大范围值
+            var l = oUl.offsetWidth/7 * 5; 
+            var timer = null,clientX = 0,times = 0,onOff = true;
+            for(var i = 0; i < aLi.length; i++){
+                aImg[i].index = i;
+                aLi[i].style.width = (view().W / 7 / view().W) *100 + "%";
+            }
+            oUl.onmousemove = moveFn;
+            oUl.onmouseout = outFn;
+            oUl.onclick = function(ev){
+                cancelAnimationFrame(timer);
+                if(onOff){
+                    onOff = !onOff;
+                    var target = ev.target;
+                    if(target.nodeName.toLowerCase() === "img"){
+                        oDiv.id = "abc";
+                        for(var i = 0; i < aImg.length; i++){
+                            aImg[i].style.transition = "transform .4s cubic-bezier(.445,.05,.55,.95)";
+                        }
+                        for(var j = 0; j < aImg.length; j++){
+                            if(j < target.index){
+                                aImg[j].parentNode.className = "prev";
+                            }else if(j > target.index){
+                                aImg[j].parentNode.className = "next";
+                            }
+                        }
+                        target.parentNode.className = "lager";
+                        var targetMiddle = offsetL(target) + target.offsetWidth / 2;
+                        var value = view().W / 2 - targetMiddle;
+                        oUl.style.transform = "translate3d("+ value * 3 +"px,0,0) scale(3)"
+                        oUl.onmousemove = null;
+                        oUl.onmouseout = null;
+                    }
+                }else{
+                    oUl.removeAttribute("style");
+                    for( var i = 0; i < aLi.length; i++){
+                        aLi[i].className = "";
+                    }
+                    oDiv.id = "";   
+                    setTimeout(function(){
+                        oUl.onmousemove = moveFn;
+                        oUl.onmouseout = outFn;
+                        onOff = !onOff;
+                    },300)
+                }
+            }
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="div1">
+        <ul class="ul1">
+            <li><img src="img/1-1.png" alt="看啥呢？"></li>
+            <li><img src="img/2-2.png" alt="看啥呢？"></li>
+            <li><img src="img/3-3.png" alt="看啥呢？"></li>
+            <li><img src="img/4-4.png" alt="看啥呢？"></li>
+            <li><img src="img/5-5.png" alt="看啥呢？"></li>
+            <li><img src="img/6-6.png" alt="看啥呢？"></li>
+            <li><img src="img/7-7.png" alt="看啥呢？"></li>
+        </ul>
+    </div>
+</body>
+</html>
