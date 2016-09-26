@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+		//原型：改写对象下面公用的方法与属性，让公用的内容在内存中存在一份，提高性能
+		//原型：prototype 要写在构造函数的下面
+		function CreatePerson(name){
+			this.name = name;
+		}
+		CreatePerson.prototype.showName = function(){
+			alert(this.name);
+		}
+		var p1 = new CreatePerson("小明");
+		var p2 = new CreatePerson("小明");
+		alert(p1.name == p2.name);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

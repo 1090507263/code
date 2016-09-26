@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+		//封装函数
+			function createPerson(name){
+				var obj = new Object();
+				obj.name = name;
+				obj.showName = function(){
+					alert(this.name);
+				}
+				return obj;
+			}
+			
+			createPerson("小明").showName();
+			createPerson("小强").showName();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
