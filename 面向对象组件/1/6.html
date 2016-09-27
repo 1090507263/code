@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#div div,#div2 div{width:200px;height:200px;border:1px solid #000; display:none;}
+			.active{color: red;}
+		</style>
+	</head>
+	<body>
+		<div id="div">
+			<input class="active" type="button" value="1" />
+			<input type="button" value="2" />
+			<input type="button" value="3" />
+			<div style="display: block;">1111</div>
+			<div>2222</div>
+			<div>3333</div>
+		</div>
+		<div id="div2">
+			<input class="active" type="button" value="1" />
+			<input type="button" value="2" />
+			<input type="button" value="3" />
+			<div style="display: block;">1111</div>
+			<div>2222</div>
+			<div>3333</div>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var t1 = new Tab("div");
+				t1.init();
+				
+				var t2 = new Tab("div2");
+				t2.init();
+				t2.autoPlay();
+			}
+			function Tab(id){
+				this.oDiv = document.getElementById(id);
+				this.aInput = this.oDiv.getElementsByTagName("input");
+				this.aDdiv = this.oDiv.getElementsByTagName("div");
+				this.iNow = 0;
+			}
+			Tab.prototype.init = function(){
+				var This = this;
+				for (var i = 0; i < this.aInput.length; i++) {
+					this.aInput[i].index = i;
+					this.aInput[i].onclick = function(){
+						This.change(this);
+					}
+				}
+			}
+			Tab.prototype.change = function(obj){
+				for (var i = 0; i < this.aInput.length; i++) {
+					this.aInput[i].className = "";
+					this.aDdiv[i].style.display = "none";
+				}
+				obj.className = "active";
+				this.aDdiv[obj.index].style.display = "block";
+			}
+			Tab.prototype.autoPlay = function(){
+				var This = this;
+				setInterval(function(){
+					if (This.iNow == This.aInput.length - 1) {
+						This.iNow = 0;
+					}else{
+						This.iNow++;
+					}
+					for (var i = 0; i < This.aInput.length; i++) {
+						This.aInput[i].className = "";
+						This.aDdiv[i].style.display = "none";
+					}
+					This.aInput[This.iNow].className = "active";
+					This.aDdiv[This.iNow].style.display = "block";
+				},2000);
+			}
+		</script>
+	</body>
+</html>

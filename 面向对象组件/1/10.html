@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+//			hasOwnProperty:看是不是自身下面的属性
+			
+			var arr = [];
+			arr.num = 20;
+			Array.prototype.num2 = 30;
+//			alert(arr.hasOwnProperty("num")); //true
+//			alert(arr.hasOwnProperty("num2"));//false
+			alert(arr.hasOwnProperty == Object.prototype.hasOwnProperty);//true  属于Object下的 通过原型链
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

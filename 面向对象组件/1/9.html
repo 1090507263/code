@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			//原型链：实例对象与原型之间的连接 _proto_(隐式连接)
+			//原型链对外层：Obkect.prototype
+			function Aaa(){
+				//this.num = 20; //构造函数中 普通方法与属性优先级高于原型下的方法与属性，因为普通方法与属性会挂载到所创建的对象下，原型下的属性与方法则需要通过原型链查找
+			}
+			//Aaa.prototype.num = 10;
+			Object.prototype.num = 30;
+			var a1 = new Aaa();
+			alert(a1.num);//30
+			
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>
