@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+		//	call：为了改变某个函数运行时的内部 this 的指向。
+			function cat(){
+				this.name = "小明";
+			}
+			cat.prototype.say = function(){
+				alert(this.name);
+			}
+			var blackCat = new cat;
+			blackCat.say();
+			
+			var whiteDog = {name:"小黑"};
+			blackCat.say.call(whiteDog);//whiteDog并没有say方法，所以使用call使say运行的时候内部this指向whiteDog，所以this.name变成了小黑
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

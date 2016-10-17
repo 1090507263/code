@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.select-main{
+				width: 100%;
+				border: 1px solid #eeeeee;
+				font-size: 14px;
+				color: #635c73;
+			    font-family: inherit;
+			}
+			.select-main select{
+				display: none;
+			}
+			.select-main .select-title{
+				padding: 5px;
+				width: 100%;
+				position: relative;
+			}
+			.select-main .select-title .select-title-empty{
+				position: absolute;
+				right: 13px;
+				top: 5px;
+				cursor: pointer;
+			}
+			.select-main .select-section{
+				width: 100%;
+			}
+			.select-main .select-section .section-search{
+				margin:0px 5px 8px;
+			}
+			.select-main .select-section .section-search input{
+				padding: 5px;
+				box-sizing: border-box;
+				height: 25px;
+				color: #635c73;
+			    font-family: inherit;
+			    border: 1px solid #eeeeee;
+			    outline:none;
+			    width: 100%;
+			    font-size: 14px;
+			}
+			.select-main .select-section .section-search input:focus{
+				box-shadow: 0 0 12px #e5e2fc;
+				border-color: #dad6eb;
+			}
+			.select-main .select-section ul{
+				margin: 0px;
+				padding: 0px;
+			}
+			.select-main .select-section ul li{
+				padding: 0px 10px;
+				box-sizing: border-box;
+				list-style-type: none;
+				line-height: 24px;
+				width: 100%;
+				transition: .5s;
+			}
+			.select-main .select-section ul li:hover{
+				background-color: #f4f4f4;
+				color: #4d90fe;
+			}
+			.select-main .select-section ul p{
+				text-align: center;
+			    padding: 12px;
+			    margin: 0px;
+			    line-height: 0px;
+			    background-color: #f4f4f4;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" style="width: 200px;"></div>
+		
+		
+		<script type="text/javascript">
+			window.onload = function(){
+				var aUser = {
+					'name':['石晓杰','李亚','郑财','刘源','黄薇','李皓颖','闻挣'],
+					'val':[4,2,5,6,7,8,9]
+				}
+				var select = new selectModule({
+					"id":"box",
+					"name":"dsa",
+					"placeholder":"请选择绑定患者",
+					"json":aUser
+				});
+				select.init();
+			}
+			function selectModule (parameter){
+//				parameter:{id->id,name->selectName,json->{name,val}下拉内容,placeholder->提示}
+				this.aParameter = parameter;
+				this.main = document.getElementById(this.aParameter.id);
+				this.mainBox = document.createElement("div");
+				this.oPlaceholder = document.createElement("div");//占位符
+				this.oSelect = document.createElement("select");//下拉框
+				this.oDiv = document.createElement("div");//载体
+				this.oSearchDiv = document.createElement("div");//搜索框
+				this.oSearch = document.createElement("input");
+				this.oUl = document.createElement("ul");//ui
+				this.oEmpty = document.createElement("div");//清空
+				this.aLi = "";
+				var This = this;
+				this.oPlaceholder.onclick = function(ev){
+					This.showSelectFn(ev);
+				}
+				
+				this.oUl.onclick = function(ev){
+					This.hideSelectFn(ev);
+				}
+				
+				this.oSearch.oninput = function(){
+					This.searchFn(this);
+				}
+				this.oSearch.onclick = function(ev){
+					This.evCancelBubbleFn(ev);
+				}
+				document.onclick = function(){
+					This.removeSelectFn();
+				}
+			}
+			//初始化
+			selectModule.prototype.init =  function(){
+				this.mainBox.className = "select-main";
+				this.oPlaceholder.innerHTML = this.aParameter.placeholder;
+				this.oPlaceholder.className = "select-title";
+				this.oSelect.name = this.aParameter.name;
+				this.oDiv.className = "select-section";
+				this.oSearch.setAttribute("type","text");
+				this.oSearch.setAttribute("placeholder","搜索");
+				this.oSearchDiv.className = "section-search"
+				this.oEmpty.className = "select-title-empty";
+				this.oEmpty.innerHTML = "×";
+				this.oSearchDiv.appendChild(this.oSearch);
+				this.mainBox.appendChild(this.oSelect);
+				this.mainBox.appendChild(this.oPlaceholder);
+				this.main.appendChild(this.mainBox);
+			}
+			//显示下拉内容
+			selectModule.prototype.showSelectFn = function(ev){
+				ev.cancelBubble = true;
+				var target = ev.target;
+				if (target.className == this.oEmpty.className) {
+					this.oPlaceholder.removeChild(this.oEmpty);
+					this.oPlaceholder.innerHTML = this.aParameter.placeholder;
+					this.oSelect.innerHTML = null;
+				}else{
+					this.aLi = "";
+					this.oSearch.value = null;
+					this.oDiv.appendChild(this.oSearchDiv);
+					for (var i = 0; i < this.aParameter.json.name.length; i++) {
+						this.aLi+="<li id="+this.aParameter.json.val[i]+">"+this.aParameter.json.name[i]+"</li>";
+					}
+					this.oUl.innerHTML = this.aLi;
+					this.oDiv.appendChild(this.oUl);
+					this.mainBox.appendChild(this.oDiv);
+					this.oSearch.focus();
+				}
+			}
+			//隐藏下拉内容
+			selectModule.prototype.hideSelectFn = function(ev){
+				ev.cancelBubble = true;
+				var target = ev.target;
+				var target = target;
+				if (target.tagName.toLocaleLowerCase() == "li"){
+					this.oPlaceholder.innerHTML = target.innerHTML;
+					this.oPlaceholder.appendChild(this.oEmpty);
+					this.oSelect.innerHTML = "<option value="+target.id+" selected='selected'>"+target.innerHTML+"</option>";
+					this.mainBox.removeChild(this.oDiv);
+				}
+			}
+			//搜索
+			selectModule.prototype.searchFn = function(obj){
+				var aLi = ""; 
+				if (obj.value != "") {
+					for (var i = 0; i < this.aParameter.json.name.length; i++) {
+						if (this.aParameter.json.name[i].indexOf(obj.value) != -1) {
+							aLi+="<li id="+this.aParameter.json.val[i]+">"+this.aParameter.json.name[i]+"</li>";
+						}
+					}
+				}else{
+					aLi = this.aLi;
+				}
+				if (!aLi) aLi = "<p>没有匹配结果</p>";
+				this.oUl.innerHTML = aLi;
+			}		
+			//阻止冒泡
+			selectModule.prototype.evCancelBubbleFn = function(ev){
+				ev.cancelBubble = true;
+			}
+			//冒泡隐藏搜索框
+			selectModule.prototype.removeSelectFn = function(){
+				if (this.mainBox.querySelector("."+this.oDiv.className)) {
+					this.mainBox.removeChild(this.oDiv);
+				}
+			}
+		</script>
+	</body>
+</html>

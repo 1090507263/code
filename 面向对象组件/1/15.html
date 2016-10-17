@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			//继承：子类不影响父类，可继承父类一些功能（代码复用）
+			//属性继承：调用父类的构造函数，采用call函数
+			//方法集成：for in 拷贝集成
+			
+			function CreatePreson(name){//父类
+				this.name = name;
+			}
+			CreatePreson.prototype.showName = function(){
+				alert(this.name);
+			}
+			
+			var p1 = new CreatePreson("小白");
+			p1.showName();
+			
+			function CreateStar(name,sex){//子类
+				CreatePreson.call(this,name);
+				this.sex = sex;
+			}
+			extend(CreateStar.prototype,CreatePreson.prototype);
+			var p2 = new CreateStar("小黑","男");
+			p2.showName();
+			function extend(obj1,obj2){
+				for (var attr in obj2) {
+					obj1[attr]  = obj2[attr];
+				}
+			}
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
