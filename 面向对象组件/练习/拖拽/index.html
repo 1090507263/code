@@ -3,7 +3,33 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			#div1{width: 100px; height:100px; background:red;}
+		</style>
 	</head>
 	<body>
+		<div id="div1"></div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var div1 = new Drag("div1"); //构造函数
+				div1.init();
+			}
+			
+			function Drag(id){
+				this.obj = document.getElementById(id);
+				this.disX = this.obj.offsetLeft;
+				this.disY = this.obj.offsetTop;
+			}
+			Drag.prototype.init = function(){
+				this.obj.onmousedown = this.downFn;
+				this.obj.onmouseup = this.upFn;
+			}
+			Drag.prototype.downFn = function(){
+				alert(1)
+			}
+			Drag.prototype.upFn = function(){
+				alert(2)
+			}
+		</script>
 	</body>
 </html>
